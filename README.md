@@ -27,8 +27,8 @@ Define a `bedrock-openai` provider in your `opencode.json`:
       "name": "OpenAI on Bedrock",
       "options": {
         "baseURL": "https://bedrock-mantle.us-east-1.api.aws/openai/v1",
-        "awsRegion": "us-east-1",
-        "awsProfile": "my-profile"
+        "region": "us-east-1",
+        "profile": "my-profile"
       },
       "models": {
         "openai.gpt-5.5": { "name": "GPT-5.5 (Bedrock)" }
@@ -45,8 +45,8 @@ The plugin automatically seeds authentication on startup — no manual `auth.jso
 | Option       | Description                          | Default                           |
 | ------------ | ------------------------------------ | --------------------------------- |
 | `baseURL`    | Bedrock OpenAI-compatible endpoint   | (required)                        |
-| `awsRegion`  | AWS region for token generation      | `$AWS_REGION` or `us-east-1`      |
-| `awsProfile` | AWS credentials profile              | `$AWS_PROFILE` or default chain   |
+| `region`     | AWS region for token generation      | `$AWS_REGION` or `us-east-1`      |
+| `profile`    | AWS credentials profile              | `$AWS_PROFILE` or default chain   |
 
 ## Authentication
 
@@ -57,14 +57,14 @@ The plugin uses the [AWS Node Provider Chain](https://docs.aws.amazon.com/sdk-fo
 - SSO profiles
 - IAM roles (EC2, ECS, Lambda)
 
-If `awsProfile` is set in the provider options (or `AWS_PROFILE` is set in the environment), that named profile is used.
+If `profile` is set in the provider options (or `AWS_PROFILE` is set in the environment), that named profile is used.
 
 Tokens are cached for 11 hours and refreshed automatically.
 
 ## How it works
 
 1. On plugin load, `client.auth.set` seeds a placeholder entry in `auth.json` so the provider is recognized.
-2. The `config` hook reads `awsRegion` and `awsProfile` from your provider config.
+2. The `config` hook reads `region` and `profile` from your provider config.
 3. The `auth.loader` hook provides an initial `apiKey` (bearer token) to the provider.
 4. The `chat.headers` hook injects a fresh `Authorization: Bearer <token>` header on every request to the `bedrock-openai` provider.
 

@@ -42,8 +42,8 @@ export default (async (input) => {
   return {
     config: async (cfg: Config) => {
       const opts = (cfg as any).provider?.["bedrock-openai"]?.options ?? {}
-      const region = opts.awsRegion ?? process.env.AWS_REGION ?? "us-east-1"
-      const profile = opts.awsProfile ?? process.env.AWS_PROFILE
+      const region = opts.region ?? process.env.AWS_REGION ?? "us-east-1"
+      const profile = opts.profile ?? process.env.AWS_PROFILE
       initTokenProvider(region, profile)
     },
     auth: {
