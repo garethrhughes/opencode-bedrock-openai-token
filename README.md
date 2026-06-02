@@ -13,14 +13,6 @@ Add the plugin to your `opencode.json`:
 }
 ```
 
-Add the the following to `~/.local/share/opencode/auth.json`
-
-```json
-{
-  "bedrock-openai": { "type": "api", "key": "placeholder-overridden-by-plugin" }
-}
-```
-
 ## Configure the provider
 
 Define a `bedrock-openai` provider in your `opencode.json`:
@@ -46,6 +38,8 @@ Define a `bedrock-openai` provider in your `opencode.json`:
 }
 ```
 
+The plugin automatically seeds authentication on startup — no manual `auth.json` editing required.
+
 ### Provider options
 
 | Option       | Description                          | Default                           |
@@ -69,9 +63,10 @@ Tokens are cached for 11 hours and refreshed automatically.
 
 ## How it works
 
-1. On startup, the `config` hook reads `awsRegion` and `awsProfile` from your provider config.
-2. The `auth.loader` hook provides an initial `apiKey` (bearer token) to the provider.
-3. The `chat.headers` hook injects a fresh `Authorization: Bearer <token>` header on every request to the `bedrock-openai` provider.
+1. On plugin load, `client.auth.set` seeds a placeholder entry in `auth.json` so the provider is recognized.
+2. The `config` hook reads `awsRegion` and `awsProfile` from your provider config.
+3. The `auth.loader` hook provides an initial `apiKey` (bearer token) to the provider.
+4. The `chat.headers` hook injects a fresh `Authorization: Bearer <token>` header on every request to the `bedrock-openai` provider.
 
 ## Local development
 

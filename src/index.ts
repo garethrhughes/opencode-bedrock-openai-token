@@ -29,25 +29,36 @@ const freshToken = async () => {
   return token
 }
 
-export default (async (_input) => ({
-  config: async (cfg: Config) => {
-    const opts = (cfg as any).provider?.["bedrock-openai"]?.options ?? {}
-    const region = opts.awsRegion ?? process.env.AWS_REGION ?? "us-east-1"
-    const profile = opts.awsProfile ?? process.env.AWS_PROFILE
-    initTokenProvider(region, profile)
-  },
-  auth: {
-    provider: "bedrock-openai",
-    methods: [],
-    loader: async () => {
-      return {
-        apiKey: await freshToken(),
+export default (async (input) => {
+  // Seed auth.json so the auth.loader hook is invoked during provider resolution
+  await input.client.auth.set({
+    path: { id: "bedrock-openai" },
+    body: {
+      type: "api",
+      key: "bedrock-managed",
+    },
+  })
+
+  return {
+    config: async (cfg: Config) => {
+      const opts = (cfg as any).provider?.["bedrock-openai"]?.options ?? {}
+      const region = opts.awsRegion ?? process.env.AWS_REGION ?? "us-east-1"
+      const profile = opts.awsProfile ?? process.env.AWS_PROFILE
+      initTokenProvider(region, profile)
+    },
+    auth: {
+      provider: "bedrock-openai",
+      methods: [],
+      loader: async () => {
+        return {
+          apiKey: await freshToken(),
+        }
+      },
+    },
+    "chat.headers": async (input, output) => {
+      if (input.provider?.info?.id === "bedrock-openai") {
+        output.headers["Authorization"] = `Bearer ${await freshToken()}`
       }
     },
-  },
-  "chat.headers": async (input, output) => {
-    if (input.provider?.info?.id === "bedrock-openai") {
-      output.headers["Authorization"] = `Bearer ${await freshToken()}`
-    }
-  },
-})) satisfies Plugin
+  }
+}) satisfies Plugin
