@@ -1,0 +1,22 @@
+{
+  "name": "opencode-bedrock-token",
+  "version": "0.1.0",
+  "description": "OpenCode plugin for AWS Bedrock token authentication via the OpenAI-compatible endpoint",
+  "type": "module",
+  "main": "src/index.ts",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "aws",
+    "bedrock",
+    "token"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/credential-providers": "^3.0.0",
+    "@aws/bedrock-token-generator": "^1.1.0"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=1.15.0"
+  }
+}
