@@ -1,6 +1,6 @@
 {
-  "name": "opencode-bedrock-token",
-  "version": "0.1.0",
+  "name": "opencode-bedrock-openai-token",
+  "version": "0.1.1",
   "description": "OpenCode plugin for AWS Bedrock token authentication via the OpenAI-compatible endpoint",
   "type": "module",
   "main": "src/index.ts",

@@ -1,4 +1,4 @@
-# opencode-bedrock-token
+# opencode-bedrock-openai-token
 
 OpenCode plugin that authenticates requests to AWS Bedrock's OpenAI-compatible endpoint using short-lived tokens from the [Bedrock Token Generator](https://github.com/aws/bedrock-token-generator-js).
 
@@ -9,7 +9,15 @@ Add the plugin to your `opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-bedrock-token"]
+  "plugin": ["opencode-bedrock-openai-token"]
+}
+```
+
+Add the the following to `~/.local/share/opencode/auth.json`
+
+```json
+{
+  "bedrock-openai": { "type": "api", "key": "placeholder-overridden-by-plugin" }
 }
 ```
 
@@ -20,7 +28,7 @@ Define a `bedrock-openai` provider in your `opencode.json`:
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-bedrock-token"],
+  "plugin": ["opencode-bedrock-openai-token"],
   "provider": {
     "bedrock-openai": {
       "npm": "@ai-sdk/openai",
